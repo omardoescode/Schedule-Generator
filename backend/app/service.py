@@ -42,18 +42,16 @@ def group_slots(courses: List[Course]) -> Dict[str, List[List[Slot]]]:
 def generate_schedules(courses: List[Course]) -> List[Schedule]:
     """
     Given a list of courses, try to generate all possible schedules
+    Only return schedules that include all courses, or return an empty list if none exist.
     """
     schedules: List[Schedule] = []
     groups = group_slots(courses)
 
     def aux(index: int, rsf: Schedule):
         if index == len(courses):
-            if not rsf.empty():
+            if not rsf.empty() and len(rsf.courses) == len(courses):
                 schedules.append(rsf)
             return
-
-        # Try to not take this course
-        aux(index + 1, rsf)
 
         # Try to take this course
         course = courses[index]
